@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/distributed-security.iml" filepath="$PROJECT_DIR$/distributed-security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributed-security-order/distributed-security-order.iml" filepath="$PROJECT_DIR$/distributed-security-order/distributed-security-order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributed-security-uaa/distributed-security-uaa.iml" filepath="$PROJECT_DIR$/distributed-security-uaa/distributed-security-uaa.iml" />
+    </modules>
+  </component>
+</project>
