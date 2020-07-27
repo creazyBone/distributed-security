@@ -39,7 +39,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
     }
 
     //资源服务内的令牌解析（校验）服务
-/*    @Bean
+/*   @Bean
     public ResourceServerTokenServices resourceServerTokenServices(){
         //使用远程授权服务器校验token，必须制定校验token的url、client_id、client_secret
         RemoteTokenServices services = new RemoteTokenServices();
