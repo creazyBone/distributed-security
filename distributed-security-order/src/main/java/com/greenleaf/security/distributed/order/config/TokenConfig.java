@@ -1,29 +1,27 @@
-package com.greenleaf.security.distributed.uaa.config;
+package com.greenleaf.security.distributed.order.config;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.util.FileCopyUtils;
 
 @Configuration
 public class TokenConfig {
 
     public String SIGNING_KEY = "uaa123";
 
- //   @Autowired
- //   private JwtAccessTokenConverter jwtAccessTokenConverter;
+    //   @Autowired
+    //   private JwtAccessTokenConverter jwtAccessTokenConverter;
 
     @Bean
     public TokenStore tokenStore(){
         //使用内存存储（普通）令牌
         //      return new InMemoryTokenStore();
         // 用jwt令牌
-         return new JwtTokenStore(jwtAccessTokenConverter());
-      //  return new JwtTokenStore(jwtAccessTokenConverter);
+        return new JwtTokenStore(jwtAccessTokenConverter());
+        //  return new JwtTokenStore(jwtAccessTokenConverter);
     }
 
     @Bean
