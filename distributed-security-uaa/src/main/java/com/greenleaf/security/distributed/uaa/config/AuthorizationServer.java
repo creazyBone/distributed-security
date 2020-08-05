@@ -1,24 +1,30 @@
 package com.greenleaf.security.distributed.uaa.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
+import org.springframework.security.oauth2.config.annotation.builders.JdbcClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.sql.DataSource;
 import java.util.Arrays;
 
 /**
@@ -47,6 +53,17 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+/*  客户端详情配置在数据库中时使用
+    @Bean
+    public ClientDetailsService getClientDetailsService(@Qualifier("dataSource") DataSource dataSource) {
+        ClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
+        ((JdbcClientDetailsService) clientDetailsService).setPasswordEncoder(passwordEncoder);
+        return clientDetailsService;
+    }*/
+
     //令牌服务
     public AuthorizationServerTokenServices authorizationServerTokenServices() {
         DefaultTokenServices service = new DefaultTokenServices();
@@ -64,9 +81,10 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
         return service;
     }
 
-    //暂时采用内存方式的授权码服务
+    //暂时采用内存方式的授权码服务，实际生产环境中由于可能是集群环境，不会使用这种方式，否则会有单点问题
     @Bean
     public AuthorizationCodeServices authorizationCodeServices() {
+      //  return new JdbcAuthorizationCodeServices();//授权码存在数据库
         return new InMemoryAuthorizationCodeServices();
     }
 
@@ -74,7 +92,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     //配置ClientBuilder用来返回ClientDetailsService
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        //clients.withClientDetails(clientDetailsService);
+        //clients.withClientDetails(clientDetailsService);//客户端详情配置在数据库中时使用
 
         //用内存来保存。此方法返回一个InMemoryClientDetailsServiceBuilder，
         //并且把ClientDetailsServiceConfigurer原先持有的securityBuilder替换成InMemoryClientDetailsServiceBuilder
@@ -84,7 +102,8 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
                 .resourceIds("res1")//资源列表
                 //允许的授权类型（授权模式），表示客户端可以哪种类型来申请令牌
                 .authorizedGrantTypes("authorization_code", "password", "client_credentials", "implicit", "refresh_token")
-                .scopes("all")//用来限制客户端的访问范围，如果为空（默认）的话，那么客户端拥有全部的访问范围。注意，这个“all”仅仅是一个标识，也可以是“aaa”
+                .scopes("all123")//用来限制客户端的访问范围，如果为空（默认）的话，那么客户端拥有全部的访问范围。注意，这个“all”仅仅是一个标识，也可以是“aaa”
+                //而且经测试，在密码模式下，在请求体中这个scope可以不带，但是一旦带上这个参数就必须与此处配置的一致！
                 .autoApprove(false)//false跳转到授权页面，true就不跳转了
                 .redirectUris("http://www.baidu.com");//验证回调地址
     }

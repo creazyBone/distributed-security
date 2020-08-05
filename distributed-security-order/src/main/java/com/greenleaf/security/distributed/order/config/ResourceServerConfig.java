@@ -3,6 +3,7 @@ package com.greenleaf.security.distributed.order.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -14,6 +15,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
 @EnableResourceServer
+@EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)//从WebSecurityConfig中搬过来的
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 
     public static final String RESOURCE_ID = "res1";
@@ -32,14 +34,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/**").access("#oauth2.hasScope('all')")
+                .antMatchers("/r/**").authenticated()//从WebSecurityConfig中搬过来的，可以不配WebSecurityConfig
+            //    .antMatchers("/**").access("#oauth2.hasScope('all1123')") //网关中配置了，这里都可以不配
+                .anyRequest().permitAll()//从WebSecurityConfig中搬过来的
                 .and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//因为是基于token的方式，session就不用保存认证信息了
     }
 
     //资源服务内的令牌解析（校验）服务
-/*   @Bean
+/*  @Bean
     public ResourceServerTokenServices resourceServerTokenServices(){
         //使用远程授权服务器校验token，必须制定校验token的url、client_id、client_secret
         RemoteTokenServices services = new RemoteTokenServices();

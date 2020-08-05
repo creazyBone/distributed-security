@@ -1,4 +1,3 @@
-   part1.
 
    关于public void configure(ClientDetailsServiceConfigurer clients) throws Exception 的分析
 

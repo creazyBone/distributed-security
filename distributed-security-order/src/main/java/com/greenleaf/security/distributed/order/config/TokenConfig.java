@@ -27,7 +27,7 @@ public class TokenConfig {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter(){
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey(SIGNING_KEY);//对称密钥，资源服务器用改密钥来验证
+        converter.setSigningKey(SIGNING_KEY);//对称密钥，资源服务器用此密钥来验证
         return converter;
     }
 }

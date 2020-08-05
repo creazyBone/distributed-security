@@ -6,4 +6,8 @@ public class Child extends Parent {
     public void seeParentName(){
         System.out.println(super.getName());
     }
+
+    public Daughter getDaughter(){
+        return  new Daughter();
+    }
 }

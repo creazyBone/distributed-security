@@ -7,12 +7,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="distributed-security" />
+        <module name="distributed-security-discovery" />
+        <module name="distributed-security-gateway" />
         <module name="distributed-security-order" />
         <module name="distributed-security-uaa" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="distributed-security" target="1.8" />
+      <module name="distributed-security-discovery" target="1.8" />
+      <module name="distributed-security-gateway" target="1.8" />
       <module name="distributed-security-order" target="1.8" />
       <module name="distributed-security-uaa" target="1.8" />
     </bytecodeTargetLevel>

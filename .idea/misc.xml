@@ -6,6 +6,8 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/distributed-security-uaa/pom.xml" />
         <option value="$PROJECT_DIR$/distributed-security-order/pom.xml" />
+        <option value="$PROJECT_DIR$/distributed-security-discovery/pom.xml" />
+        <option value="$PROJECT_DIR$/distributed-security-gateway/pom.xml" />
       </list>
     </option>
   </component>
